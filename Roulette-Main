@@ -1,0 +1,275 @@
+import random
+import RouletteWindows as WN
+
+global chipSizes
+chipSizes = [1, 5, 10, 50, 100, 500]
+global weirdBets
+weirdBets = ["1st 12", "2nd 12", "3rd 12", "1st row", "2nd row", "3rd row", "1st half", "2nd half", "evens", "odds", "even", "odd", "black", "blacks", "red", "reds"]
+rows = [[3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 36], [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35], [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]]
+global Wheel
+Wheel = [
+"                        [- 9]   [-22]   [-18]\n",
+"                    [-31]                    [-29]\n",
+"                [-14]                            [- 7]\n",
+"             [-20]                                  [-28]\n",
+"           [- 1]                                        [-12]\n",
+"        [-33]\n",
+"      [-16]                                               [-35]\n",
+"                                                          [- 3]\n",
+"   [-24]\n",
+"                                {-}                        [-26]\n",
+"  [- 5]                         |-|\n",
+"                           (====|+|====)                    [- 0]\n",
+"  [-10]                         |-|\n",
+"                                {-}                        [-32]\n",
+"   [-23]\n",
+"                                                         [-15]\n",
+"    [- 8]                                                [-19]\n",
+"      [-30]\n",
+"        [-11]                                          [- 4]\n",
+"            [-36]                                    [-21]\n",
+"                [-13]                            [- 2]\n",
+"                   [-27]                     [-25]\n",
+"                        [- 6]   [-34]   [-17]\n\n"
+]
+global BallLocs
+BallLocs = [
+    [0, 25],
+    [0, 33], 
+    [0, 41], 
+    [1, 46], 
+    [2, 50], 
+    [3, 53], 
+    [4, 57], 
+    [6, 59], 
+    [7, 59],
+    [9, 60],
+    [11, 61],
+    [13, 60],
+    [15, 58],
+    [16, 58],
+    [18, 56],
+    [19, 54],
+    [20, 50],
+    [21, 46],
+    [22, 41],
+    [22, 33],
+    [22, 25],
+    [21, 20], 
+    [20, 17], 
+    [19, 13], 
+    [18, 9], 
+    [17, 7],
+    [16, 5], 
+    [14, 4],
+    [12, 3],
+    [10, 3],
+    [8, 4],
+    [6, 7],
+    [5, 9],  
+    [4, 12],
+    [3, 14], 
+    [2, 17],  
+    [1, 21]
+]
+global numberList
+numberList = [9, 22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31]
+global WheelColours
+WheelColours = [
+    [0, 27, 'highlighted'], [0, 42, 'highlighted'], [0, 43, 'highlighted'],
+    [2, 18, 'highlighted'], [2, 19, 'highlighted'], [2, 52, 'highlighted'],
+    [4, 14, 'highlighted'], [4, 58, 'highlighted'], [4, 59, 'highlighted'],
+    [6, 8, 'highlighted'], [6, 9, 'highlighted'],
+    [7, 61, 'highlighted'],
+    [10, 5, 'highlighted'],
+    [11, 63, 'green'],
+    [13, 61, 'highlighted'], [13, 62, 'highlighted'],
+    [14, 5, 'highlighted'], [14, 6, 'highlighted'],
+    [16, 59, 'highlighted'], [16, 60, 'highlighted'],
+    [17, 8, 'highlighted'], [17, 9, 'highlighted'],
+    [19, 14, 'highlighted'], [19, 15, 'highlighted'], [19, 55, 'highlighted'], [19, 56, 'highlighted'],
+    [21, 21, 'highlighted'], [21, 22, 'highlighted'], [21, 47, 'highlighted'], [21, 48, 'highlighted'],
+    [22, 34, 'highlighted'], [22, 35, 'highlighted']
+]
+global table
+table = [
+"   .----------------------------------------------------------------------.\n",
+"  /    | 3 | 6 | 9 | 12 | 15 | 18 | 21 | 24 | 27 | 30 | 33 | 36 | 1ST ROW |\n",
+" /     |--------------------------------------------------------|---------|\n",
+"|   0  | 2 | 5 | 8 | 11 | 14 | 17 | 20 | 23 | 26 | 29 | 32 | 35 | 2ND ROW |\n",
+" \     |--------------------------------------------------------| --------|\n",
+"  \    | 1 | 4 | 7 | 10 | 13 | 16 | 19 | 22 | 25 | 28 | 31 | 34 | 3RD ROW |\n",
+"   `----------------------------------------------------------------------`\n",
+"    |        1ST 12     |       2ND 12      |       3RD 12      |\n",
+"    |-----------------------------------------------------------|\n",
+"    |  1ST HALF | EVENS |---RED---|--BLACK--|  ODDS  | 2ND HALF |\n",
+"    `-----------------------------------------------------------`\n",]
+global tableCols
+tableCols = [[1, 9, "highlighted"], [1, 17, "highlighted"], [1, 21, "highlighted"], [1, 22, "highlighted"], [1, 31, "highlighted"], [1, 32, "highlighted"], [1, 36, "highlighted"], [1, 37, "highlighted"], [1, 46, "highlighted"], [1, 47, "highlighted"], [1, 51, "highlighted"], [1, 52, "highlighted"], [1, 61, "highlighted"], [1, 62, "highlighted"],
+             [3, 4, "green"], [3, 13, "highlighted"], [3, 26, "highlighted"], [3, 27, "highlighted"], [3, 41, "highlighted"], [3, 42, "highlighted"], [3, 56, "highlighted"], [3, 57, "highlighted"],
+             [5, 9, "highlighted"], [5, 17, "highlighted"], [5, 31, "highlighted"], [5, 32, "highlighted"], [5, 36, "highlighted"], [5, 37, "highlighted"], [5, 46, "highlighted"], [5, 47, "highlighted"], [5, 61, "highlighted"], [5, 62, "highlighted"],
+             [9, 25, "highlighted"], [9, 26, "highlighted"], [9, 27, "highlighted"], [9, 28, "highlighted"], [9, 29, "highlighted"], [9, 30, "highlighted"], [9, 31, "highlighted"], [9, 32, "highlighted"], [9, 33, "highlighted"]
+            ]
+
+def spin():
+    number = random.randint(0,36)
+    return number
+
+def genScreen():
+    global chipsSpare
+    global chipsBetted
+    global chipsTotal
+    Colour = 'normal'
+    try:
+        t, Colour = checkNumType(int(bet))
+        if Colour == "black": Colour = 'normal'
+        elif Colour == "red": Colour = 'highlighted'
+    except:
+        if bet in ("black", "blacks"): Colour = 'normal'
+        elif bet in ("reds", "red"): Colour = 'highlighted'
+    display = [[f"                             Total: {chipsTotal}\n", 'highlighted'],[f"                 Spare Chips: {chipsSpare}   ", 'highlighted'], [f"  Betted Chips: {chipsBetted}\n", 'highlighted'],[f"                          Your Bet: {str(bet).upper()}\n", Colour]]
+
+    return display
+
+def checkNumType(num):
+    ### odd/even + colour ###
+    Type = ""
+    Colour = ""
+    if num % 2 == 0:
+        Type = "even"
+        if num != 0:
+            if num > 0 and num <= 10:Colour = "black"
+            elif num > 10 and num < 19:Colour = "red"
+            elif num >= 19 and num <= 28:Colour = "black"
+            elif num >= 28:Colour = "red"
+        elif num == 0: Colour = "green"
+    elif num % 2 != 0: 
+        Type = "odd"
+        if num != 0:
+            if num > 0 and num <= 10:Colour = "red"
+            elif num > 10 and num < 19:Colour = "black"
+            elif num >= 19 and num <= 28:Colour = "red"
+            elif num >= 28:Colour = "black"
+        elif num == 0: Colour = "green"
+    print(Type)
+    return Type, Colour
+
+def possibleBet(bet):
+    bet = WN.Enter("-ROULETTE-", [table, tableCols], genScreen(), "Enter your bet")
+    while True:
+        try:
+            if int(bet) > 36 or int(bet) < 0:
+                bet = WN.Enter("-ROULETTE-", [table, tableCols], genScreen(), "Invalid number")
+            else:
+                break
+        except:
+            if bet.lower() not in weirdBets:
+                bet = WN.Enter("-ROULETTE-", [table, tableCols], genScreen(), "Invalid section")  
+            else: 
+                break  
+    return bet
+
+
+def checkBet(bet, number):
+    global rows
+    multiplier = 0
+    try:
+        if int(bet) == number: multiplier = 35
+    except:
+        tpe, col = checkNumType(number)
+        if number != 0:
+            for i in range(8, len(weirdBets)):
+                if tpe == weirdBets[i].replace("s", "") and bet == weirdBets[i] or col == weirdBets[i].replace("s", "") and bet == weirdBets[i]:
+                    multiplier = 1
+            if bet == "1st half" and number in range(1, 18) or bet == "2nd half" and number in range(18, 36): multiplier = 1
+            elif bet == "1st 12" and number in range(1, 12) or bet == "2nd 12" and number in range(12, 24) or bet == "3rd 12" and number in range(24, 36): multiplier = 2
+            elif bet == "1st row" and number in rows[0] or bet == "2nd row" and number in rows[1] or bet == "3rd row" and number in rows[2]: multiplier = 2
+    return multiplier
+
+def readGame(filename):
+    amount = []
+    with open(filename, "r") as file:
+        for line in file:
+            fline = int(line.strip())
+            amount.append(fline)
+    return amount
+
+
+def saveGame(filename, amount):
+    with open(filename, "w") as file:
+        file.write(str(amount) + "\n")
+    
+
+
+def main():
+    global chipsSpare
+    global chipsBetted
+    global chipsTotal
+    global bet
+    bet = "none"
+
+    bet = possibleBet(bet)
+
+    while True:
+        chipsSpare = chipsTotal - chipsBetted
+        doSelect = WN.Menu('-ROULETTE-', [table, tableCols], genScreen(), ["", 'normal'], ['Bet Money','Spin Wheel', 'Reset Money','-End Program-'], 'blue')
+        match str(doSelect):
+            case "0":
+                moneySelect = WN.Menu('-ROULETTE-', [table, tableCols], genScreen(), ["", 'normal'], ['$1', '$5', '$10', '$50', '$100', '$500', '-Escape-'], 'blue')
+                try:
+                    if moneySelect < 6 and chipsSpare >= chipSizes[int(moneySelect)]:
+                        chipsBetted += chipSizes[int(moneySelect)]
+                except:
+                    chipsBetted += 0
+            case "1":
+                spinNum = spin()
+                numb = numberList.index(spinNum)
+                WN.Img('-ROULETTE-', [Wheel, WheelColours, BallLocs], numb+1)
+                multi = checkBet(bet, spinNum)
+                winnings = chipsBetted * multi
+                if multi != 0:
+                    chipsTotal += winnings
+                else:
+                    chipsTotal -= chipsBetted
+                saveGame("RLChips", chipsTotal)
+                chipsBetted = 0
+                chipsSpare = chipsTotal - chipsBetted
+                Colour = 'normal'
+                try:
+                    t, Colour = checkNumType(int(spinNum))
+                    if Colour == "black": Colour = 'normal'
+                    elif Colour == "red": Colour = 'highlighted'
+                except:
+                    if bet in ("black", "blacks"): Colour = 'normal'
+                    elif bet in ("reds", "red"): Colour = 'highlighted'
+                if multi != 0:
+                    doSelect = WN.Menu('-ROULETTE-', [Wheel, WheelColours, BallLocs, numb],genScreen(), [f"The winning number was {spinNum}, You won ${winnings + chipsBetted}!", Colour], ['Back'], 'blue')
+                    return 'n'
+                elif multi == 0:
+                    doSelect = WN.Menu('-ROULETTE-', [Wheel, WheelColours, BallLocs, numb],genScreen(), [f"The winning number was {spinNum}, You lost!", Colour], ['Back'], 'blue')
+                    return 'n'
+            case "2":
+                chipsTotal = 1000
+                saveGame("RLChips", chipsTotal)
+            case "3":
+                quit()
+
+
+doSelect = WN.Menu('-ROULETTE-', 0, [['Welcome to ASCII Roulette!\n', 'green']], ["", 'normal'], ['Start Game', 'Reset Game', '-End Program-'], 'blue')
+match doSelect:
+    case 1:
+        chipsTotal = 1000
+        saveGame("RLChips", chipsTotal)
+    case 2:
+        quit()
+try:
+    readList = readGame("RLChips")
+except:
+    chipsTotal = 1000
+    saveGame("RLChips", chipsTotal)
+    readList = readGame("RLChips")
+chipsTotal = readList[0]
+chipsBetted = 0
+chipsSpare = chipsTotal - chipsBetted
+while True:
+    main()
